@@ -1,32 +1,21 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "User" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
 
-  - You are about to drop the column `alamat` on the `User` table. All the data in the column will be lost.
-  - You are about to drop the column `no_hp` on the `User` table. All the data in the column will be lost.
-  - You are about to drop the column `tgl_lahir` on the `User` table. All the data in the column will be lost.
-  - You are about to drop the `Account` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Transaction` table. If the table is not empty, all the data it contains will be lost.
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
-*/
--- DropForeignKey
-ALTER TABLE "Account" DROP CONSTRAINT "Account_userId_fkey";
+-- CreateTable
+CREATE TABLE "Profile" (
+    "id" SERIAL NOT NULL,
+    "bio" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
 
--- DropForeignKey
-ALTER TABLE "Transaction" DROP CONSTRAINT "Transaction_receiverId_fkey";
-
--- DropForeignKey
-ALTER TABLE "Transaction" DROP CONSTRAINT "Transaction_senderId_fkey";
-
--- AlterTable
-ALTER TABLE "User" DROP COLUMN "alamat",
-DROP COLUMN "no_hp",
-DROP COLUMN "tgl_lahir";
-
--- DropTable
-DROP TABLE "Account";
-
--- DropTable
-DROP TABLE "Transaction";
+    CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "BankAccount" (
@@ -50,7 +39,19 @@ CREATE TABLE "Transactions" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "BankAccount_accountNumber_key" ON "BankAccount"("accountNumber");
+
+-- CreateIndex
+CREATE INDEX "BankAccount_userId_idx" ON "BankAccount"("userId");
+
+-- AddForeignKey
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "BankAccount" ADD CONSTRAINT "BankAccount_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

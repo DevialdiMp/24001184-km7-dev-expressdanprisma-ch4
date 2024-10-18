@@ -9,12 +9,13 @@ app.use(express.json());
 
 //MENAMBAHKAN USER DAN PROFILNYA KARENA RELASI (create)
 app.post('/api/v1/users', async (req, res) => {
-    let { name, email, bio } = req.body;
+    let { name, email, password, bio } = req.body;
     try {
         let user = await prisma.user.create({
             data: {
                 name,
                 email,
+                password,
                 profile: {
                     create: {
                         bio,
@@ -61,7 +62,7 @@ app.get('/api/v1/users/:userId', async (req, res) => {
 //UPDATE USERS DAN PROFILNYA KARENA RELASI BERDASARKAN ID (update)
 app.put('/api/v1/users/:userId', async (req, res) => {
     let { userId } = req.params;
-    let { name, email, bio } = req.body;
+    let { name, email, password, bio } = req.body;
 
     try {
         let user = await prisma.user.update({
@@ -69,6 +70,7 @@ app.put('/api/v1/users/:userId', async (req, res) => {
             data: {
                 name,
                 email,
+                password,
                 profile: {
                     update: {
                         bio,
