@@ -32,9 +32,7 @@ app.post('/api/v1/users', async (req, res) => {
 //MENAMPILKAN DATA USER (read)
 app.get('/api/v1/users', async (req, res) => {
     try {
-        let users = await prisma.user.findMany({
-            include: { profile: true },
-        });
+        let users = await prisma.user.findMany();
         res.status(200).json(users);
     } catch (error) {
         res.status(500).json({ Pesan: 'Terjadi kesalahan' });
